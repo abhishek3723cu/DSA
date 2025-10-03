@@ -1,8 +1,8 @@
-SELECT MAX(num) AS num
-FROM MyNumbers
-WHERE num IN (
-    SELECT num
-    FROM MyNumbers
-    GROUP BY num
-    HAVING COUNT(num) = 1
-);
+select max(num) as num
+from mynumbers
+where num in (
+    select num
+    from mynumbers
+    group by num
+    having count(num)=1
+)
