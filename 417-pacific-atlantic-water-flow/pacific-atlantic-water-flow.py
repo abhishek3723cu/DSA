@@ -1,0 +1,31 @@
+class Solution:
+    def pacificAtlantic(self, heights: List[List[int]]) -> List[List[int]]:
+        if not heights or not heights[0]:
+            return []
+        
+        rows, cols = len(heights), len(heights[0])
+        pacific, atlantic = set(), set()
+        
+        def dfs(r, c, visit, prevHeight):
+            if ((r, c) in visit or 
+                r < 0 or c < 0 or 
+                r >= rows or c >= cols or 
+                heights[r][c] < prevHeight):
+                return
+            visit.add((r, c))
+            dfs(r+1, c, visit, heights[r][c])
+            dfs(r-1, c, visit, heights[r][c])
+            dfs(r, c+1, visit, heights[r][c])
+            dfs(r, c-1, visit, heights[r][c])
+        
+        # Pacific ocean borders
+        for c in range(cols):
+            dfs(0, c, pacific, heights[0][c])      # Top row
+            dfs(rows-1, c, atlantic, heights[rows-1][c])  # Bottom row
+        for r in range(rows):
+            dfs(r, 0, pacific, heights[r][0])      # Left column
+            dfs(r, cols-1, atlantic, heights[r][cols-1])  # Right column
+        
+        # Intersection = cells that can reach both oceans
+        result = list(pacific & atlantic)
+        return result
